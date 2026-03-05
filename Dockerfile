@@ -1,4 +1,4 @@
-# DM Log Call Flow Analyzer - Docker Image
+# DM Log Converter - Docker Image
 FROM ubuntu:22.04
 
 # 환경 변수 설정
@@ -14,15 +14,8 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     git \
     libusb-1.0-0 \
-    software-properties-common \
-    && add-apt-repository ppa:wireshark-dev/stable \
-    && apt-get update \
-    && apt-get install -y tshark \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
-
-# tshark를 non-root 사용자가 실행할 수 있도록 설정
-RUN chmod +x /usr/bin/dumpcap \
-    && setcap cap_net_raw,cap_net_admin=eip /usr/bin/dumpcap
 
 # scat 설치 (GitHub에서 직접 설치)
 # SCAT: Signaling Collection and Analysis Tool
@@ -36,21 +29,19 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # 애플리케이션 파일 복사
 COPY src/ src/
 COPY templates/ templates/
-COPY wireshark/ wireshark/
 
-# Wireshark Lua 플러그인 전역 설치
-RUN mkdir -p /usr/lib/x86_64-linux-gnu/wireshark/plugins \
-    && cp wireshark/scat.lua /usr/lib/x86_64-linux-gnu/wireshark/plugins/
+# 로그 디렉토리 생성
+RUN mkdir -p /logs
 
-# 데이터 디렉토리 생성
-RUN mkdir -p uploads pcaps jsons
+# 환경 변수 설정 (Docker 환경)
+ENV LOGS_DIR=/logs
 
 # 포트 노출
-EXPOSE 8080
+EXPOSE 9090
 
 # 헬스체크
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python3 -c "import requests; requests.get('http://localhost:8080')" || exit 1
+    CMD python3 -c "import requests; requests.get('http://localhost:9090')" || exit 1
 
 # Flask 애플리케이션 실행
 CMD ["python3", "src/app.py"]
