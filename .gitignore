@@ -33,3 +33,6 @@ logs/*.pcap
 
 # Docker
 scat
+
+# Kiro
+.kiro/
