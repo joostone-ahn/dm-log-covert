@@ -26,9 +26,6 @@ logs/
 
 # Docker
 scat
-docker-compose.yml
-Dockerfile
-.dockerignore
 
 # Kiro
 .kiro/
@@ -36,9 +33,6 @@ Dockerfile
 # Old projects and backups
 old-local-converter/
 ftp-converter/
-
-# GitHub
-.github/
 
 # Wireshark
 wireshark/

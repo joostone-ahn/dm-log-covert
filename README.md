@@ -18,14 +18,46 @@ FTP 서버의 DM 로그를 자동으로 PCAP으로 변환하는 웹 애플리케
 
 ## 설치 및 실행
 
-### 사전 요구사항
+### 방법 1: Docker 사용 (권장)
 
-- Python 3.8+
-- scat (DM 로그 변환 도구)
-
-### 설치
+Docker를 사용하면 scat과 tshark가 자동으로 설치되어 별도의 설정 없이 바로 사용할 수 있습니다.
 
 ```bash
+# GitHub Container Registry에서 이미지 다운로드
+docker pull ghcr.io/joostone-ahn/dm-log-covert:latest
+
+# 컨테이너 실행
+docker run -d -p 9090:9090 ghcr.io/joostone-ahn/dm-log-covert:latest
+```
+
+또는 docker-compose 사용:
+
+```bash
+# 저장소 클론
+git clone https://github.com/joostone-ahn/dm-log-covert.git
+cd dm-log-covert
+
+# Docker Compose로 실행
+docker-compose up -d
+```
+
+서버가 시작되면 브라우저에서 `http://localhost:9090`으로 접속하세요.
+
+### 방법 2: 로컬 실행
+
+#### 사전 요구사항
+
+- Python 3.8+
+- scat (DM 로그 변환 도구) - [설치 가이드](https://github.com/fgsect/scat)
+- tshark (Wireshark CLI)
+
+#### 설치
+
+```bash
+# 저장소 클론
+git clone https://github.com/joostone-ahn/dm-log-covert.git
+cd dm-log-covert
+
 # 가상환경 생성 및 활성화
 python3 -m venv .venv
 source .venv/bin/activate  # macOS/Linux
@@ -35,7 +67,7 @@ source .venv/bin/activate  # macOS/Linux
 pip install -r requirements.txt
 ```
 
-### 실행
+#### 실행
 
 ```bash
 python src/app.py
