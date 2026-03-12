@@ -50,6 +50,54 @@ python src/app.py
 - `.dlf` - Qualcomm
 - `.sdm` - Samsung
 
+## Wireshark에서 변환된 PCAP 파일 분석하기
+
+변환된 PCAP 파일을 Wireshark에서 제대로 분석하려면 SCAT Lua 플러그인을 설치해야 합니다.
+
+### 1. Lua 플러그인 파일 준비
+
+이 저장소의 `wireshark/scat.lua` 파일을 사용합니다.
+
+### 2. Wireshark 플러그인 경로 확인
+
+Wireshark 버전 및 운영체제에 따라 플러그인 폴더 위치가 다릅니다.
+
+1. Wireshark를 실행합니다
+2. 상단 메뉴에서 `Help > About Wireshark`를 클릭합니다
+3. `Folders` 탭을 선택합니다
+4. `Personal Plugins` 항목의 경로를 확인합니다
+
+일반적인 경로:
+- **Windows**: `C:\Users\<사용자명>\AppData\Roaming\Wireshark\plugins`
+- **macOS**: `~/.local/lib/wireshark/plugins` 또는 `~/.wireshark/plugins`
+- **Linux**: `~/.local/lib/wireshark/plugins` 또는 `~/.wireshark/plugins`
+
+### 3. Lua 파일 복사 및 적용
+
+1. 위에서 확인한 Personal Plugins 폴더로 이동합니다 (폴더가 없다면 직접 생성)
+2. `scat.lua` 파일을 해당 폴더 안에 복사합니다
+3. Wireshark를 재시작하거나, 이미 실행 중이라면 `Ctrl + Shift + L`을 눌러 Lua 엔진을 리로드합니다
+
+### 4. 적용 여부 확인 및 필터 설정
+
+**적용 확인**:
+- `Help > About Wireshark > Plugins` 탭에서 `scat.lua`가 Lua Script 유형으로 목록에 있는지 확인합니다
+
+**필터 적용**:
+- Wireshark 상단 필터창(Display Filter)에 아래 명령어를 입력하여 SCAT을 통해 캡처된 트래픽만 선별합니다:
+
+```
+gsmtap_extra || gsmtap
+```
+
+- `gsmtap`: 표준 패킷
+- `gsmtap_extra`: SCAT의 Lua 플러그인이 해석하는 확장 정보(Qualcomm/Samsung 특정 메타데이터 등)
+
+### 주요 참고 사항
+
+- **Wireshark 버전**: GSMTAPv3 및 최신 5G 디코딩을 위해 Wireshark 3.0.0 이상을 권장하며, 안정적인 동작을 위해 4.2.5 이상 사용이 유리합니다
+- **GSMTAPv3 지원**: SCAT 1.3.0 이상 버전에서 생성된 PCAP 데이터는 표준 Wireshark 메인라인에 아직 통합되지 않은 GSMTAPv3 정의를 사용하므로, 이 Lua 플러그인이 있어야만 5G NR 메시지가 정상적으로 보입니다
+
 ## 기술 스택
 
 - **백엔드**: Flask 3.0.0

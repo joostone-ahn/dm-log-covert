@@ -39,3 +39,6 @@ ftp-converter/
 
 # GitHub
 .github/
+
+# Wireshark
+wireshark/
