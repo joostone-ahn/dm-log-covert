@@ -27,7 +27,7 @@ Docker를 사용하면 scat과 tshark가 자동으로 설치되어 별도의 설
 ```bash
 docker run -d \
   -p 9090:9090 \
-  --name ftp-dm-converter \
+  --name dm-log-convert \
   ghcr.io/joostone-ahn/dm-log-covert:latest
 ```
 
@@ -37,7 +37,7 @@ docker run -d \
 docker run -d \
   --platform linux/amd64 \
   -p 9090:9090 \
-  --name ftp-dm-converter \
+  --name dm-log-convert \
   ghcr.io/joostone-ahn/dm-log-covert:latest
 ```
 
@@ -46,7 +46,7 @@ docker run -d \
 #### Windows
 
 ```bash
-docker run -d -p 9090:9090 --name ftp-dm-converter ghcr.io/joostone-ahn/dm-log-covert:latest
+docker run -d -p 9090:9090 --name dm-log-convert ghcr.io/joostone-ahn/dm-log-covert:latest
 ```
 
 **참고**: Windows 사용자는 Docker Desktop 사용을 위해 WSL2가 설치되어 있어야 합니다.
