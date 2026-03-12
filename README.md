@@ -18,7 +18,7 @@ FTP 서버의 DM 로그를 자동으로 PCAP으로 변환하는 웹 애플리케
 
 ## 설치 및 실행
 
-### 방법 1: Docker 사용 (권장)
+### 1. 🐳 Docker 사용 (권장)
 
 Docker를 사용하면 scat과 tshark가 자동으로 설치되어 별도의 설정 없이 바로 사용할 수 있습니다.
 
@@ -41,7 +41,7 @@ docker run -d \
   ghcr.io/joostone-ahn/dm-log-covert:latest
 ```
 
-참고: Apple Silicon 사용자는 이미지가 AMD64용으로 빌드되었으므로 `--platform linux/amd64`를 사용해야 합니다.
+**참고**: Apple Silicon 사용자는 이미지가 AMD64 아키텍처용으로 빌드되었으므로 `--platform linux/amd64`를 사용해야 합니다.
 
 #### Windows
 
@@ -49,13 +49,13 @@ docker run -d \
 docker run -d -p 9090:9090 --name ftp-dm-converter ghcr.io/joostone-ahn/dm-log-covert:latest
 ```
 
-참고: Windows 사용자는 Docker Desktop을 위해 WSL2가 설치되어 있어야 합니다.
+**참고**: Windows 사용자는 Docker Desktop 사용을 위해 WSL2가 설치되어 있어야 합니다.
 
 #### 애플리케이션 접속
 
-브라우저에서 http://localhost:9090 으로 접속하세요.
+브라우저를 열고 http://localhost:9090 으로 접속하세요.
 
-### 방법 2: 로컬 실행
+### 2. 💻 로컬 실행
 
 #### 사전 요구사항
 
