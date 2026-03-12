@@ -15,14 +15,7 @@ env/
 .venv
 
 # Logs directory
-logs/*.qmdl
-logs/*.hdf
-logs/*.dlf
-logs/*.sdm
-logs/*.pcap
-
-# Keep .gitkeep file
-!logs/.gitkeep
+logs/
 
 # IDE
 .vscode/
