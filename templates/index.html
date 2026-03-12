@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DM Log Converter - DM 로그 변환 도구</title>
+    <title>FTP DM Log Converter</title>
     <style>
         * {
             margin: 0;
@@ -12,14 +12,14 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
@@ -41,212 +41,191 @@
 
         .card {
             background: white;
-            border-radius: 12px;
+            border-radius: 15px;
             padding: 30px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
 
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
+        .form-group {
             margin-bottom: 20px;
         }
 
-        .status-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.85em;
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
             font-weight: 600;
-        }
-
-        .status-badge.success {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status-badge.error {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .section-title {
-            font-size: 1.3em;
-            margin-bottom: 15px;
             color: #333;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
-        .options-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .option-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .option-group label {
-            font-weight: 600;
-            color: #555;
-            font-size: 0.9em;
-        }
-
-        select, input[type="text"] {
-            padding: 10px;
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
             border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 1em;
+            border-radius: 8px;
+            font-size: 14px;
             transition: border-color 0.3s;
         }
 
-        select:focus, input[type="text"]:focus {
+        .form-group input:focus,
+        .form-group select:focus {
             outline: none;
             border-color: #667eea;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
 
         .checkbox-group {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 6px;
+            gap: 10px;
         }
 
         .checkbox-group input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+            width: auto;
             cursor: pointer;
-        }
-
-        .file-list {
-            max-height: 400px;
-            overflow-y: auto;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .file-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 15px;
-            border-bottom: 1px solid #f0f0f0;
-            transition: background 0.2s;
-        }
-
-        .file-item:hover {
-            background: #f8f9fa;
-        }
-
-        .file-item:last-child {
-            border-bottom: none;
-        }
-
-        .file-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .file-name {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .file-size {
-            font-size: 0.85em;
-            color: #888;
-        }
-
-        .file-ext {
-            display: inline-block;
-            padding: 2px 8px;
-            background: #667eea;
-            color: white;
-            border-radius: 4px;
-            font-size: 0.75em;
-            font-weight: 600;
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 12px 30px;
             border: none;
             border-radius: 8px;
-            font-size: 1em;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
         }
 
         .btn-primary {
-            background: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
 
         .btn-primary:hover:not(:disabled) {
-            background: #5568d3;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
 
-        .btn-success {
-            background: #28a745;
+        .btn-secondary {
+            background: #6c757d;
             color: white;
+            margin-right: 10px;
         }
 
-        .btn-success:hover:not(:disabled) {
-            background: #218838;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+        .btn-secondary:hover:not(:disabled) {
+            background: #5a6268;
         }
 
-        .btn-group {
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .browser-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .current-path {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .directory-list {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .directory-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: background 0.2s;
             display: flex;
+            align-items: center;
             gap: 10px;
-            flex-wrap: wrap;
+        }
+
+        .directory-item:hover {
+            background: #f8f9fa;
+        }
+
+        .directory-item:last-child {
+            border-bottom: none;
+        }
+
+        .directory-item.selected {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+        }
+
+        .file-preview {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .file-preview h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .file-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .file-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #dee2e6;
+            font-size: 14px;
+        }
+
+        .file-list li:last-child {
+            border-bottom: none;
+        }
+
+        .progress-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .progress-log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            text-align: left;
         }
 
         .loading {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
+            margin-left: 10px;
         }
 
         @keyframes spin {
@@ -254,365 +233,396 @@
             100% { transform: rotate(360deg); }
         }
 
-        .result-box {
-            display: none;
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 8px;
-            background: #f8f9fa;
-        }
-
-        .result-box.success {
-            background: #d4edda;
-            border: 2px solid #c3e6cb;
-        }
-
-        .result-box.error {
-            background: #f8d7da;
-            border: 2px solid #f5c6cb;
-        }
-
-        .result-title {
-            font-weight: 600;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
-
-        .result-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin: 15px 0;
-        }
-
-        .stat-item {
-            text-align: center;
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
             padding: 15px;
-            background: white;
-            border-radius: 6px;
+            margin-bottom: 20px;
+            border-radius: 4px;
         }
 
-        .stat-value {
-            font-size: 2em;
-            font-weight: 700;
-            color: #667eea;
+        .info-box h3 {
+            margin-bottom: 10px;
+            color: #1976D2;
         }
 
-        .stat-label {
-            font-size: 0.9em;
+        .info-box ul {
+            margin-left: 20px;
+        }
+
+        .info-box li {
+            margin-bottom: 5px;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
             color: #666;
-            margin-top: 5px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 8px;
         }
 
-        .log-box {
-            background: #2d3748;
-            color: #e2e8f0;
-            padding: 15px;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.85em;
-            max-height: 400px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            margin-top: 15px;
+        .step.active .step-number {
+            background: #667eea;
+            color: white;
         }
 
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #999;
+        .step.completed .step-number {
+            background: #28a745;
+            color: white;
         }
 
-        .empty-state-icon {
-            font-size: 3em;
-            margin-bottom: 10px;
+        .step-label {
+            font-size: 14px;
+            color: #666;
         }
 
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8em;
-            }
-
-            .options-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .btn-group {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
+        .step.active .step-label {
+            color: #667eea;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔄 DM Log Converter</h1>
+            <h1>🌐 FTP DM Log Converter</h1>
+            <p>FTP 서버의 DM 로그를 자동으로 PCAP으로 변환</p>
         </div>
 
         <div class="card">
-            <div class="status-bar" id="statusBar">
-                <div class="status-item">
-                    <span>SCAT 상태:</span>
-                    <span class="status-badge" id="scatStatus">확인 중...</span>
+            <div class="step-indicator">
+                <div class="step active" id="step1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">FTP 연결</div>
                 </div>
-                <div class="status-item">
-                    <span>파일 수:</span>
-                    <span id="fileCount">0</span>
+                <div class="step" id="step2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">디렉토리 선택</div>
+                </div>
+                <div class="step" id="step3">
+                    <div class="step-number">3</div>
+                    <div class="step-label">변환 실행</div>
                 </div>
             </div>
 
-            <div class="section-title">⚙️ 변환 옵션</div>
-            <div class="options-grid">
-                <div class="option-group">
-                    <label for="layers">추출 레이어</label>
-                    <input type="text" id="layers" value="rrc,nas" placeholder="예: rrc,nas,ip">
+            <div class="info-box">
+                <h3>📋 작동 방식</h3>
+                <ul>
+                    <li>FTP 서버에 접속하여 디렉토리 탐색 후 원하는 디렉토리 선택</li>
+                    <li>선택한 디렉토리의 DM 로그 파일만 변환 (하위 디렉토리 미포함)</li>
+                    <li>동일 이름의 .pcap 파일이 있으면 건너뛰기</li>
+                    <li>변환 후 같은 위치에 파일명 동일하게 .pcap 파일 업로드</li>
+                </ul>
+            </div>
+
+            <!-- Step 1: FTP 연결 -->
+            <div id="connectionForm">
+                <h3 style="margin-bottom: 20px;">1단계: FTP 서버 연결</h3>
+                <form id="ftpForm">
+                    <div class="form-group">
+                        <label>FTP 서버 호스트 *</label>
+                        <input type="text" id="host" value="180.228.85.25" placeholder="ftp.example.com" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>포트</label>
+                            <input type="number" id="port" value="21">
+                        </div>
+                        <div class="form-group">
+                            <label>시작 경로</label>
+                            <input type="text" id="startPath" value="/" placeholder="/">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>사용자명 *</label>
+                            <input type="text" id="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label>비밀번호 *</label>
+                            <input type="password" id="password" required>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 30px;">
+                        <button type="submit" class="btn btn-primary">디렉토리 탐색</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 2: 디렉토리 선택 -->
+            <div class="browser-container" id="browserContainer">
+                <h3 style="margin-bottom: 20px;">2단계: 디렉토리 선택</h3>
+                <div class="current-path" id="currentPath">/</div>
+                <div class="directory-list" id="directoryList"></div>
+                
+                <div class="file-preview" id="filePreview" style="display: none;">
+                    <h4>선택한 디렉토리의 파일 (<span id="fileCount">0</span>개)</h4>
+                    <ul class="file-list" id="fileList"></ul>
                 </div>
-                <div class="option-group">
-                    <label>GSMTAPv3</label>
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="gsmtapV3" checked>
-                        <label for="gsmtapV3">GSMTAPv3 활성화 (5G NR)</label>
+
+                <div style="margin-top: 20px;">
+                    <button type="button" class="btn btn-primary" id="convertBtn" onclick="startConversion()" disabled>선택한 디렉토리 변환</button>
+                </div>
+            </div>
+
+            <!-- Step 3: 변환 옵션 및 진행 -->
+            <div class="progress-container" id="progressContainer">
+                <h3>3단계: 변환 진행</h3>
+                <div class="form-row" style="margin: 20px 0;">
+                    <div class="form-group">
+                        <label>추출 레이어</label>
+                        <input type="text" id="layers" value="rrc,nas" placeholder="rrc,nas">
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="gsmtapv3" checked>
+                            <label for="gsmtapv3" style="margin: 0;">GSMTAPv3 활성화</label>
+                        </div>
                     </div>
                 </div>
+                <div class="progress-log" id="progressLog"></div>
             </div>
-
-            <div class="section-title">📁 입력 파일 (/input)</div>
-            <div class="file-list" id="fileList">
-                <div class="empty-state">
-                    <div class="empty-state-icon">📂</div>
-                    <p>파일을 불러오는 중...</p>
-                </div>
-            </div>
-
-            <div class="btn-group">
-                <button class="btn btn-primary" onclick="refreshFiles()">
-                    🔄 파일 목록 새로고침
-                </button>
-                <button class="btn btn-success" onclick="convertBatch()" id="batchBtn" disabled>
-                    ⚡ 일괄 변환
-                </button>
-            </div>
-
-            <div class="loading" id="loading">
-                <div class="spinner"></div>
-                <p id="loadingText">변환 중입니다. 잠시만 기다려주세요...</p>
-                <div class="log-box" id="progressLog" style="display: none; margin-top: 15px; max-height: 300px; text-align: left;"></div>
-            </div>
-
-            <div class="result-box" id="resultBox"></div>
         </div>
     </div>
 
     <script>
-        let files = [];
+        let ftpConfig = {};
+        let currentPath = '/';
+        let selectedPath = null;
+        let eventSource = null;
 
-        // 초기화
-        async function init() {
-            await checkStatus();
-            await loadFiles();
-        }
+        document.getElementById('ftpForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-        // 시스템 상태 확인
-        async function checkStatus() {
+            ftpConfig = {
+                host: document.getElementById('host').value,
+                port: parseInt(document.getElementById('port').value),
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value
+            };
+
+            currentPath = document.getElementById('startPath').value || '/';
+            
+            await loadDirectories(currentPath);
+            
+            // UI 전환
+            document.getElementById('connectionForm').style.display = 'none';
+            document.getElementById('browserContainer').style.display = 'block';
+            
+            // 단계 표시 업데이트
+            document.getElementById('step1').classList.add('completed');
+            document.getElementById('step1').classList.remove('active');
+            document.getElementById('step2').classList.add('active');
+        });
+
+        async function loadDirectories(path) {
+            const directoryList = document.getElementById('directoryList');
+            directoryList.innerHTML = '<div style="padding: 20px; text-align: center;">로딩 중...</div>';
+            
+            currentPath = path;  // currentPath 업데이트
+            document.getElementById('currentPath').textContent = path;
+
             try {
-                const response = await fetch('/api/status');
-                const data = await response.json();
+                const response = await fetch('/api/ftp/directories', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({...ftpConfig, path})
+                });
+
+                const result = await response.json();
                 
-                const scatStatus = document.getElementById('scatStatus');
-                if (data.scat_installed) {
-                    scatStatus.textContent = '정상';
-                    scatStatus.className = 'status-badge success';
+                if (!result.success) {
+                    directoryList.innerHTML = '<div style="padding: 20px; color: red;">오류: ' + result.message + '</div>';
+                    return;
+                }
+
+                directoryList.innerHTML = '';
+                
+                // 상위 디렉토리로 이동 항목 추가 (루트가 아닐 때만)
+                if (currentPath !== '/') {
+                    const parentItem = document.createElement('div');
+                    parentItem.className = 'directory-item';
+                    parentItem.style.fontWeight = 'bold';
+                    parentItem.style.color = '#666';
+                    parentItem.innerHTML = `📁 ..`;
+                    parentItem.onclick = () => goToParentDirectory();
+                    directoryList.appendChild(parentItem);
+                }
+                
+                if (result.directories.length === 0) {
+                    if (currentPath === '/') {
+                        directoryList.innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">하위 디렉토리가 없습니다</div>';
+                    } else {
+                        // .. 항목은 이미 추가되었으므로 메시지만 추가
+                        const noSubDir = document.createElement('div');
+                        noSubDir.style.padding = '20px';
+                        noSubDir.style.textAlign = 'center';
+                        noSubDir.style.color = '#666';
+                        noSubDir.textContent = '하위 디렉토리가 없습니다';
+                        directoryList.appendChild(noSubDir);
+                    }
                 } else {
-                    scatStatus.textContent = '미설치';
-                    scatStatus.className = 'status-badge error';
+                    result.directories.forEach(dir => {
+                        const item = document.createElement('div');
+                        item.className = 'directory-item';
+                        item.innerHTML = `📁 ${dir.name}`;
+                        item.onclick = () => selectDirectory(dir.path, item);
+                        item.ondblclick = () => {
+                            loadDirectories(dir.path);
+                        };
+                        directoryList.appendChild(item);
+                    });
                 }
             } catch (error) {
-                console.error('상태 확인 실패:', error);
+                directoryList.innerHTML = '<div style="padding: 20px; color: red;">오류: ' + error.message + '</div>';
             }
         }
 
-        // 파일 목록 로드
-        async function loadFiles() {
-            try {
-                const response = await fetch('/api/files');
-                const data = await response.json();
-                
-                files = data.files;
-                document.getElementById('fileCount').textContent = data.total;
-                
-                renderFileList();
-            } catch (error) {
-                console.error('파일 목록 로드 실패:', error);
-                showError('파일 목록을 불러올 수 없습니다.');
-            }
+        function goToParentDirectory() {
+            if (currentPath === '/') return;
+            
+            const parts = currentPath.split('/').filter(p => p);
+            parts.pop();
+            const parentPath = parts.length > 0 ? '/' + parts.join('/') : '/';
+            
+            loadDirectories(parentPath);
+            selectedPath = null;
+            document.getElementById('convertBtn').disabled = true;
+            document.getElementById('filePreview').style.display = 'none';
         }
 
-        // 파일 목록 렌더링
-        function renderFileList() {
+        async function selectDirectory(path, element) {
+            // 선택 표시
+            document.querySelectorAll('.directory-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            
+            selectedPath = path;
+            document.getElementById('convertBtn').disabled = false;
+
+            // 파일 목록 로드
+            const filePreview = document.getElementById('filePreview');
             const fileList = document.getElementById('fileList');
-            const batchBtn = document.getElementById('batchBtn');
+            const fileCount = document.getElementById('fileCount');
             
-            if (files.length === 0) {
-                fileList.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📭</div>
-                        <p>/input 디렉토리에 변환할 파일이 없습니다.</p>
-                        <p style="font-size: 0.9em; color: #aaa; margin-top: 10px;">
-                            지원 형식: .qmdl, .hdf, .dlf (Qualcomm), .sdm (Samsung)
-                        </p>
-                    </div>
-                `;
-                batchBtn.disabled = true;
-                return;
-            }
+            fileList.innerHTML = '<li>로딩 중...</li>';
+            filePreview.style.display = 'block';
 
-            batchBtn.disabled = false;
-            
-            fileList.innerHTML = files.map(file => `
-                <div class="file-item">
-                    <div class="file-info">
-                        <div class="file-name">${file.name}</div>
-                        <div class="file-size">${file.size_mb} MB • ${file.vendor}</div>
-                    </div>
-                    <span class="file-ext">${file.extension}</span>
-                </div>
-            `).join('');
+            try {
+                const response = await fetch('/api/ftp/files', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({...ftpConfig, path})
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    fileCount.textContent = result.count;
+                    
+                    if (result.files.length === 0) {
+                        fileList.innerHTML = '<li style="color: #666;">변환할 파일이 없습니다</li>';
+                    } else {
+                        fileList.innerHTML = '';
+                        result.files.forEach(file => {
+                            const li = document.createElement('li');
+                            li.textContent = `${file.name} → ${file.pcap_name}`;
+                            fileList.appendChild(li);
+                        });
+                    }
+                }
+            } catch (error) {
+                fileList.innerHTML = '<li style="color: red;">오류: ' + error.message + '</li>';
+            }
         }
 
-        // 파일 목록 새로고침
-        async function refreshFiles() {
-            await loadFiles();
-            hideResult();
-        }
-
-        // 일괄 변환
-        async function convertBatch() {
-            if (files.length === 0) {
-                alert('변환할 파일이 없습니다.');
-                return;
-            }
-
-            if (!confirm(`${files.length}개의 파일을 일괄 변환하시겠습니까?`)) {
+        async function startConversion() {
+            if (!selectedPath) {
+                alert('디렉토리를 선택해주세요');
                 return;
             }
 
             const layers = document.getElementById('layers').value;
-            const gsmtapV3 = document.getElementById('gsmtapV3').checked;
+            const gsmtapV3 = document.getElementById('gsmtapv3').checked;
 
-            showLoading();
-            hideResult();
+            // UI 전환
+            document.getElementById('browserContainer').style.display = 'none';
+            document.getElementById('progressContainer').style.display = 'block';
             
-            // 진행 로그 표시
+            // 단계 표시 업데이트
+            document.getElementById('step2').classList.add('completed');
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step3').classList.add('active');
+
             const progressLog = document.getElementById('progressLog');
-            progressLog.style.display = 'block';
             progressLog.textContent = '변환 시작 중...\n';
 
             try {
-                // 1. 변환 세션 시작
-                const response = await fetch('/api/convert/batch', {
+                const response = await fetch('/api/ftp/convert', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
-                        layers: layers,
+                        ...ftpConfig,
+                        target_path: selectedPath,
+                        layers,
                         gsmtap_v3: gsmtapV3
                     })
                 });
 
-                const { session_id } = await response.json();
+                const data = await response.json();
+                const sessionId = data.session_id;
 
-                // 2. SSE로 진행 상황 수신
-                const eventSource = new EventSource(`/api/convert/progress/${session_id}`);
-                
-                eventSource.onmessage = function(event) {
+                // SSE로 진행 상황 수신
+                eventSource = new EventSource(`/api/ftp/progress/${sessionId}`);
+
+                eventSource.onmessage = (event) => {
                     const data = JSON.parse(event.data);
-                    
+
                     if (data.message) {
-                        // 진행 메시지 추가
                         progressLog.textContent += data.message + '\n';
                         progressLog.scrollTop = progressLog.scrollHeight;
                     } else if (data.done) {
-                        // 변환 완료
+                        progressLog.textContent += '\n✓ 모든 작업 완료!\n';
                         eventSource.close();
-                        hideLoading();
-                        
-                        const result = data.result;
-                        showSuccess(`
-                            <div class="result-title">📊 일괄 변환 완료</div>
-                            <div class="result-stats">
-                                <div class="stat-item">
-                                    <div class="stat-value">${result.total}</div>
-                                    <div class="stat-label">전체</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-value" style="color: #28a745;">${result.success}</div>
-                                    <div class="stat-label">성공</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-value" style="color: #dc3545;">${result.failed}</div>
-                                    <div class="stat-label">실패</div>
-                                </div>
-                            </div>
-                            <div class="log-box">${result.log}</div>
-                        `);
+                        document.getElementById('step3').classList.add('completed');
                     } else if (data.error) {
-                        // 에러 발생
+                        progressLog.textContent += '\n✗ 오류: ' + data.error + '\n';
                         eventSource.close();
-                        hideLoading();
-                        showError(`변환 중 오류가 발생했습니다: ${data.error}`);
                     }
                 };
-                
-                eventSource.onerror = function(error) {
+
+                eventSource.onerror = () => {
                     eventSource.close();
-                    hideLoading();
-                    showError('연결이 끊어졌습니다. 다시 시도해주세요.');
                 };
 
             } catch (error) {
-                hideLoading();
-                showError(`일괄 변환 중 오류가 발생했습니다: ${error.message}`);
+                progressLog.textContent += '\n✗ 오류: ' + error.message + '\n';
             }
         }
-
-        // UI 헬퍼 함수
-        function showLoading() {
-            document.getElementById('loading').style.display = 'block';
-        }
-
-        function hideLoading() {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('progressLog').style.display = 'none';
-            document.getElementById('progressLog').textContent = '';
-        }
-
-        function showSuccess(html) {
-            const resultBox = document.getElementById('resultBox');
-            resultBox.className = 'result-box success';
-            resultBox.innerHTML = html;
-            resultBox.style.display = 'block';
-        }
-
-        function showError(html) {
-            const resultBox = document.getElementById('resultBox');
-            resultBox.className = 'result-box error';
-            resultBox.innerHTML = html;
-            resultBox.style.display = 'block';
-        }
-
-        function hideResult() {
-            document.getElementById('resultBox').style.display = 'none';
-        }
-
-        // 페이지 로드 시 초기화
-        init();
     </script>
 </body>
 </html>

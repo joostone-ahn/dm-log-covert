@@ -36,3 +36,7 @@ scat
 
 # Kiro
 .kiro/
+
+# Old projects
+old-local-converter/
+ftp-converter/

@@ -1,4 +1,4 @@
-# DM Log Converter - Docker Image
+# FTP DM Log Converter - Docker Image
 FROM ubuntu:22.04
 
 # 환경 변수 설정
@@ -29,12 +29,6 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # 애플리케이션 파일 복사
 COPY src/ src/
 COPY templates/ templates/
-
-# 로그 디렉토리 생성
-RUN mkdir -p /logs
-
-# 환경 변수 설정 (Docker 환경)
-ENV LOGS_DIR=/logs
 
 # 포트 노출
 EXPOSE 9090
