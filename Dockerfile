@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# scat 설치 (pip)
+# scat 설치
 RUN pip install --no-cache-dir "signalcat[fastcrc]"
 
 # 애플리케이션 파일 복사
