@@ -33,10 +33,16 @@ logs/*.pcap
 
 # Docker
 scat
+docker-compose.yml
+Dockerfile
+.dockerignore
 
 # Kiro
 .kiro/
 
-# Old projects
+# Old projects and backups
 old-local-converter/
 ftp-converter/
+
+# GitHub
+.github/
