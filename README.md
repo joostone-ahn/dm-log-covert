@@ -28,7 +28,7 @@ Docker를 사용하면 scat과 tshark가 자동으로 설치되어 별도의 설
 docker run -d \
   -p 9090:9090 \
   --name dm-log-convert \
-  ghcr.io/joostone-ahn/dm-log-covert:latest
+  ghcr.io/joostone-ahn/dm-log-convert:latest
 ```
 
 #### Mac (Apple Silicon)
@@ -38,7 +38,7 @@ docker run -d \
   --platform linux/amd64 \
   -p 9090:9090 \
   --name dm-log-convert \
-  ghcr.io/joostone-ahn/dm-log-covert:latest
+  ghcr.io/joostone-ahn/dm-log-convert:latest
 ```
 
 **참고**: Apple Silicon 사용자는 이미지가 AMD64 아키텍처용으로 빌드되었으므로 `--platform linux/amd64`를 사용해야 합니다.
@@ -46,7 +46,7 @@ docker run -d \
 #### Windows
 
 ```bash
-docker run -d -p 9090:9090 --name dm-log-convert ghcr.io/joostone-ahn/dm-log-covert:latest
+docker run -d -p 9090:9090 --name dm-log-convert ghcr.io/joostone-ahn/dm-log-convert:latest
 ```
 
 **참고**: Windows 사용자는 Docker Desktop 사용을 위해 WSL2가 설치되어 있어야 합니다.
