@@ -121,3 +121,18 @@ gsmtap_extra || gsmtap
 ## 라이선스
 
 MIT License
+
+### 서드파티 라이선스
+
+이 프로젝트는 다음 오픈소스 소프트웨어를 사용합니다:
+
+#### SCAT (Signaling Collection and Analysis Tool)
+
+- **출처**: [fgsect/scat](https://github.com/fgsect/scat)
+- **라이선스**: GNU General Public License v2.0 or later
+- **사용 부분**: `wireshark/scat.lua` (Wireshark Lua 플러그인)
+- **저작권**: Copyright (c) fgsect - Security in Telecommunications, TU Berlin
+
+SCAT is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
